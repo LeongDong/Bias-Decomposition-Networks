@@ -1,1 +1,1 @@
-As bias field only appear on imaged objects, we should ignore the influence of background. Thus, we introduce partial filter to describe the smooth varying bias field.
+As bias field only appears on imaged objects, we should ignore the influence of background. Thus, we introduce partial filter to describe the smooth varying bias field.
