@@ -21,13 +21,10 @@ class ProbPredictLoss(nn.Module):
         kernel = partialFilter(mask, size) #B*C*H*W*size*size
 
         v = classCenter(I, b, b2, up, e_detach, C, kernel)
-        I_e = I - e_detach
-        I_e2 = I_e * I_e
-        KI_e2 = convParFilt(I_e2, kernel)
-        KI_e = convParFilt(I_e, kernel)
         for i in range(C):
-            d = KI_e2 - 2 * v[i] * b * KI_e + b * b * v[i] * v[i]
-            D[:, i, :, :] = torch.pow(d, q) + 1e-9
+            d = I - b * v[i] - e_detach
+            kd_2 = convParFilt(torch.pow(d, 2), kernel)
+            D[:, i, :, :] = torch.pow(kd_2, q) + 1e-9
 
         f = 1 / D
         f_sum = torch.sum(f, dim = 1, keepdim = True)

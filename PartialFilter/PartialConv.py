@@ -5,8 +5,7 @@ import torch.nn.functional as F
 def maskCreate(image): #B*1*H*W
 
     image = image * 255
-    image[image <= 20] = 0
-    image[image > 20] = 1
+    image[image >= 0] = 1
     return image #B*1*H*W
 
 def GaussianKernel(size):

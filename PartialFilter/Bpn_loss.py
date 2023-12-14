@@ -21,12 +21,10 @@ class BiasPredictLoss(nn.Module):
 
         v = classCenter(I, b, b2, up, e_detach, C, kernel) #C
         for i in range(C):
-            bd_sub = I - e_detach #B*1*H*W
-            bd = bd + convParFilt(bd_sub, kernel) * v[i] * up[:, i, :, :]
-            db_sub = v[i] * v[i] * up[:, i, :, :] #B*H*W
-            db_sub = db_sub.unsqueeze(dim=1) #B*1*H*W
-            db = db + db_sub
+            bd = bd + convParFilt(up[:, i, :, :].unsqueeze(dim=1), kernel) * v[i]
+            db = db + v[i] * v[i] * convParFilt(up[:, i, :, :].unsqueeze(dim=1), kernel)
 
+        bd = bd * (I - e_detach)
         bd = bd * mask + (1 - mask)
         db = db * mask + (1 - mask)
         b_new = bd / (db + 1e-9)

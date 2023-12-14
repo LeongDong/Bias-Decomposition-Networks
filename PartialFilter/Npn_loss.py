@@ -40,7 +40,7 @@ class NoisePredictLoss(nn.Module):
             up_i = up[:, i, :, :]
             up_i = up_i.unsqueeze(dim=1)
             db_sub = convParFilt(up_i, kernel)
-            bd_sub =  I * db_sub - convParFilt(b * v[i] * up[:, i, :, :], kernel)#B*1*H*W
+            bd_sub = (I - b * v[i]) * db_sub#B*1*H*W
             bd = bd + bd_sub
             db = db + db_sub
 
